@@ -42,31 +42,31 @@
         - key distribution
         - Encryption
         - Decryption
-      - ![1574371935321](.\assets\1574371935321.png)
+      - ![1574371935321](./assets/1574371935321.png)
       - Math behind **RSA**
         - It is feasible to find **3 very large positive integers e,d,n** such that modular exponentiation for integers m(0<= m < n):
           - `(m^e)^d === m(mod n) `
           - even if you know e, n and m; it is extremely difficult to find d
           - `(m^e)^d === m(mod n)= (m^d)^e === m(mod n)`
           - (e, n) is used as the public key and (d,n) is used as the private key. m is the message that needs to be encrypted
-          - ![1574372283042](.\assets\1574372283042.png)
+          - ![1574372283042](./assets/1574372283042.png)
           -  RSA Algorithm:
-          - ![1574372871610](.\assets\1574372871610.png)
-          - ![1574373300296](.\assets\1574373300296.png)
+          - ![1574372871610](./assets/1574372871610.png)
+          - ![1574373300296](./assets/1574373300296.png)
           - So in blockchain implementation, suppose Alice and bob are there, Alice then encrypts her message M with her private key and receives M' , now she sends this M (Message) and M'(The hash, working as the signature for the message), and then bob can verify the signature using Alice's public key. So, M=E(M', kpub)
-          - ![1574373547170](.\assets\1574373547170.png)
+          - ![1574373547170](./assets/1574373547170.png)
           - Now to reduce the signature size, we use the message digest to compute the signature, instead of the original message
-          - ![1574373680131](.\assets\1574373680131.png)
+          - ![1574373680131](./assets/1574373680131.png)
           - BITCOIN uses ECDSA algorithm ( Elliptic Curve Digital Signature Algorithm)
   - **BITCOIN Basics**
     - Permission less blockchain, with no one in control
     - A decentralized digital currency enables instant payment all over the world
     - Uses peer-to-peer technology
-    - ![1574374237944](.\assets\1574374237944.png)
+    - ![1574374237944](./assets/1574374237944.png)
     - Double Spending: A person might make 2 transactions with the same amount of money say 50 btc, when she only has 50 btc. To prevent this in blockchain :
       - Details about the transaction are sent and forwarded to all or as many pcs as possible
       - Everyone has a copy of the blockchain
-      - ![1574374838377](.\assets\1574374838377.png)
+      - ![1574374838377](./assets/1574374838377.png)
     - Anonymity: BTC is permissionless, you do not need to setup any account. A bitcoin address mathematically corresponds to a public key based on ECDSA, so we kinda apply a hash on the public key and use the first few bits of the value as the address.
     - **BITCOIN Script:** How does bob know that the transaction is for him? 
       - A transaction has two parts:
@@ -80,15 +80,15 @@
       - FORTH :
         - Uses a stack for recursive subroutine execution
         - Uses POSTFIX notation (reverse polish notation) : ex- 2+3 --> 2 3+
-        - ![1574375314663](.\assets\1574375314663.png)
-        - ![1574375329388](.\assets\1574375329388.png)
-        - ![1574375352386](.\assets\1574375352386.png)
-        - ![1574375369910](.\assets\1574375369910.png)
-        - ![1574375384183](.\assets\1574375384183.png)
-        - ![1574375398710](.\assets\1574375398710.png)
-        - ![1574375573743](.\assets\1574375573743.png)
+        - ![1574375314663](./assets/1574375314663.png)
+        - ![1574375329388](./assets/1574375329388.png)
+        - ![1574375352386](./assets/1574375352386.png)
+        - ![1574375369910](./assets/1574375369910.png)
+        - ![1574375384183](./assets/1574375384183.png)
+        - ![1574375398710](./assets/1574375398710.png)
+        - ![1574375573743](./assets/1574375573743.png)
         - Bitcoin instead of transferring the signature and public key, it sends bitcoin script.
-        - ![1574447914124](.\assets\1574447914124.png)
+        - ![1574447914124](./assets/1574447914124.png)
         - BITCOIN Network: 
           - An ad-hoc network with random topology, Bitcoin protocol runs on TCP port 8333
           - All nodes(users) in the bitcoin network are treated equally
