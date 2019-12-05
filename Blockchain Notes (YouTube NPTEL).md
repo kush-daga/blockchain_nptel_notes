@@ -1,0 +1,98 @@
+#  Blockchain Notes (YouTube NPTEL)
+
+- ### Cryptographic Hash functions
+
+  - Input M
+  - H(M) is called as Digest
+  - Properties
+    - **Collision Free** - 2 messages are diff then digest also different
+    - **Hiding** - Given a message you can compute Digest, but given digest no defined algo to get message
+    - **Puzzle-friendly** - Given X, Y, find out k such that Y = H(X || k) - used to solve mining puzzle in Bitcoin
+  - It is difficult to find x1and x2, such that H(x1) = H(x2)
+  - **Birthday Paradox** - Find probability that in set of n randomly chosen people, some will have same birthday
+    - By Pigeonhole principal, probability is 1 when number of people reach 366 (not a leap year) or 367(leap year)
+    - 0.999 probability with just 70 people,and 0.5 probability with almost 23 people.
+  - If a Hash function produces N bits of output, an attacker can compute only **2^(N/2) hash operations** on a random input to *to find two missing outputs with probability > 0.98*, that means he can compute in this many operations two messages which might have the same digest
+    - For 256 bit output, attacker needs to compute 2^128 hash operations , this is time consuming, and if one computation takes 1 millisecond, then it takes almost 10^28 years
+  - So we can safely assume, if H(x1) = H(x2) then x1=x2
+  - SHA256 is used in hashing in blockchain
+    - Firstly pad the message such that it is a multiple of 512
+      - Suppose 'L' is length of message ,and L mod 512 !=0
+      - Append bit "1" at end of message
+      - Append k zero bits, where k is the smallest non negative solution to the equation L+1+k = 448 mod 512
+      - Append the 64 bit block which is equal to the number L written in binary
+      - The total length gets divisible by 512
+    - Parse the message into N 512 bit blocks M(1),M(2),...M(N)
+    - Every 512 bit block is further divided into 32 bit sub blocks M(i)[0], M(i)[1]....M(i)[15]
+  - **Cryptographic Hash Pointer** - Hash chain, particular hash value points to the previous Data
+  - **<u>Digital signature</u>** 
+    - A digital code which can be included with an electronically transmitted document to verify 
+      - The content  of document is authenticated
+      - The identity of the sender
+      - Prevent non-repudiation- sender will not be able to deny  about the origin of document
+    - Only signing authority can sign, but everyone can verify the sign
+    - **Public key cryptography**
+      - Key - parameter that determines the functional output of cryptography algorithm
+      - Encryption: M' = E(M,k)
+      - Decryption: M = E(M',k) 
+    - Example of Public key cryptography: RSA algorithm
+      - Encryption key is public, and decryption key is private
+      - Four phases
+        - Key generation
+        - key distribution
+        - Encryption
+        - Decryption
+      - ![1574371935321](C:\Users\kush\AppData\Roaming\Typora\typora-user-images\1574371935321.png)
+      - Math behind **RSA**
+        - It is feasible to find **3 very large positive integers e,d,n** such that modular exponentiation for integers m(0<= m < n):
+          - `(m^e)^d === m(mod n) `
+          - even if you know e, n and m; it is extremely difficult to find d
+          - `(m^e)^d === m(mod n)= (m^d)^e === m(mod n)`
+          - (e, n) is used as the public key and (d,n) is used as the private key. m is the message that needs to be encrypted
+          - ![1574372283042](C:\Users\kush\AppData\Roaming\Typora\typora-user-images\1574372283042.png)
+          -  RSA Algorithm:
+          - ![1574372871610](C:\Users\kush\AppData\Roaming\Typora\typora-user-images\1574372871610.png)
+          - ![1574373300296](C:\Users\kush\AppData\Roaming\Typora\typora-user-images\1574373300296.png)
+          - So in blockchain implementation, suppose Alice and bob are there, Alice then encrypts her message M with her private key and receives M' , now she sends this M (Message) and M'(The hash, working as the signature for the message), and then bob can verify the signature using Alice's public key. So, M=E(M', kpub)
+          - ![1574373547170](C:\Users\kush\AppData\Roaming\Typora\typora-user-images\1574373547170.png)
+          - Now to reduce the signature size, we use the message digest to compute the signature, instead of the original message
+          - ![1574373680131](C:\Users\kush\AppData\Roaming\Typora\typora-user-images\1574373680131.png)
+          - BITCOIN uses ECDSA algorithm ( Elliptic Curve Digital Signature Algorithm)
+  - **BITCOIN Basics**
+    - Permission less blockchain, with no one in control
+    - A decentralized digital currency enables instant payment all over the world
+    - Uses peer-to-peer technology
+    - ![1574374237944](C:\Users\kush\AppData\Roaming\Typora\typora-user-images\1574374237944.png)
+    - Double Spending: A person might make 2 transactions with the same amount of money say 50 btc, when she only has 50 btc. To prevent this in blockchain :
+      - Details about the transaction are sent and forwarded to all or as many pcs as possible
+      - Everyone has a copy of the blockchain
+      - ![1574374838377](C:\Users\kush\AppData\Roaming\Typora\typora-user-images\1574374838377.png)
+    - Anonymity: BTC is permissionless, you do not need to setup any account. A bitcoin address mathematically corresponds to a public key based on ECDSA, so we kinda apply a hash on the public key and use the first few bits of the value as the address.
+    - **BITCOIN Script:** How does bob know that the transaction is for him? 
+      - A transaction has two parts:
+        - Alice sends some bitcoins: the output for alice sending btc
+        - Bob receives some bitcoins: the input for bob receiving btc
+      - We need to determine that the input corresponds correctly to the output.
+      - Bitcoin script is a programming language to validate bitcoin transactions
+        - A list of instructions recorded with each transaction
+        - Describes how the next person can gain access to the bitcoins, if that person wants to spend them
+      - FORTH-like language, stack based and processed left to write
+      - FORTH :
+        - Uses a stack for recursive subroutine execution
+        - Uses POSTFIX notation (reverse polish notation) : ex- 2+3 --> 2 3+
+        - ![1574375314663](C:\Users\kush\AppData\Roaming\Typora\typora-user-images\1574375314663.png)
+        - ![1574375329388](C:\Users\kush\AppData\Roaming\Typora\typora-user-images\1574375329388.png)
+        - ![1574375352386](C:\Users\kush\AppData\Roaming\Typora\typora-user-images\1574375352386.png)
+        - ![1574375369910](C:\Users\kush\AppData\Roaming\Typora\typora-user-images\1574375369910.png)
+        - ![1574375384183](C:\Users\kush\AppData\Roaming\Typora\typora-user-images\1574375384183.png)
+        - ![1574375398710](C:\Users\kush\AppData\Roaming\Typora\typora-user-images\1574375398710.png)
+        - ![1574375573743](C:\Users\kush\AppData\Roaming\Typora\typora-user-images\1574375573743.png)
+        - Bitcoin instead of transferring the signature and public key, it sends bitcoin script.
+        - ![1574447914124](C:\Users\kush\AppData\Roaming\Typora\typora-user-images\1574447914124.png)
+        - BITCOIN Network: 
+          - An ad-hoc network with random topology, Bitcoin protocol runs on TCP port 8333
+          - All nodes(users) in the bitcoin network are treated equally
+          - New nodes can join any time, non-responding nodes are removed after 3 hours
+
+ 
+
